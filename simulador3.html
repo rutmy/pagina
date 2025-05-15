@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador - Tercera Ley de Newton</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    header {
+      background-color: #2563eb;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h2 {
+      color: #2563eb;
+    }
+
+    p.info {
+      background-color: #e0edff;
+      border-left: 5px solid #2563eb;
+      padding: 10px 15px;
+      border-radius: 5px;
+    }
+
+    .controls {
+      margin-top: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    .slider {
+      width: 100%;
+    }
+
+    .button {
+      margin: 10px 5px 0 0;
+      padding: 10px 15px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+    .arena {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 150px;
+      margin: 30px auto;
+      background-color: #e2e8f0;
+      border: 2px dashed #94a3b8;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .ball {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .ball1 {
+      background-color: #3b82f6;
+    }
+
+    .ball2 {
+      background-color: #ef4444;
+    }
+
+    @media (max-width: 600px) {
+      .arena {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Simulador Interactivo</h1>
+    <h2>Tercera Ley de Newton</h2>
+  </header>
+
+  <main>
+    <p class="info">
+      <strong>¿Qué dice la Tercera Ley de Newton?</strong><br />
+      “A toda acción siempre hay una reacción igual y contraria.” Esto significa que si un objeto A ejerce una fuerza sobre un objeto B, el objeto B ejercerá una fuerza de igual magnitud pero en sentido opuesto sobre el objeto A.
+    </p>
+
+    <div class="controls">
+      <label>Fuerza Objeto 1 (N): <span id="force1Val">10</span></label><br />
+      <input type="range" id="force1" min="5" max="30" value="10" class="slider"><br /><br />
+
+      <label>Fuerza Objeto 2 (N): <span id="force2Val">10</span></label><br />
+      <input type="range" id="force2" min="5" max="30" value="10" class="slider"><br /><br />
+
+      <button id="startBtn" class="button">Iniciar Simulación</button>
+        <button id="startBtn" class="button">Reiniciar</button>
+      <a href="index.html" class="button">Volver al Inicio</a>
+    <a href="calculadora-3.html" class="button">Calculadora</a>
+    </div>
+
+    <div class="arena">
+      <div id="ball1" class="ball ball1" style="left: 100px;">1</div>
+      <div id="ball2" class="ball ball2" style="left: 450px;">2</div>
+    </div>
+  </main>
+
+  <script>
+    const ball1 = document.getElementById('ball1');
+    const ball2 = document.getElementById('ball2');
+    const force1Slider = document.getElementById('force1');
+    const force2Slider = document.getElementById('force2');
+    const force1Val = document.getElementById('force1Val');
+    const force2Val = document.getElementById('force2Val');
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let pos1 = 100;
+    let pos2 = 450;
+    let vel1 = 0;
+    let vel2 = 0;
+    let anim;
+
+    function updateForceLabels() {
+      force1Val.textContent = force1Slider.value;
+      force2Val.textContent = force2Slider.value;
+    }
+
+    function startSimulation() {
+      cancelAnimationFrame(anim);
+
+      pos1 = 100;
+      pos2 = 450;
+
+      const f1 = parseInt(force1Slider.value);
+      const f2 = parseInt(force2Slider.value);
+
+      vel1 = f1 / 5;
+      vel2 = -f2 / 5;
+
+      startBtn.disabled = true;
+
+      animate();
+    }
+
+    function animate() {
+      pos1 += vel1;
+      pos2 += vel2;
+
+      if (pos1 + 50 >= pos2) {
+        const temp = vel1;
+        vel1 = vel2;
+        vel2 = temp;
+      }
+
+      if (pos1 <= 0 || pos2 + 50 >= 600) {
+        cancelAnimationFrame(anim);
+        startBtn.disabled = false;
+        return;
+      }
+
+      ball1.style.left = `${pos1}px`;
+      ball2.style.left = `${pos2}px`;
+
+      anim = requestAnimationFrame(animate);
+    }
+
+    function resetSimulation() {
+      cancelAnimationFrame(anim);
+      pos1 = 100;
+      pos2 = 450;
+      vel1 = 0;
+      vel2 = 0;
+      ball1.style.left = `${pos1}px`;
+      ball2.style.left = `${pos2}px`;
+      startBtn.disabled = false;
+    }
+
+    force1Slider.addEventListener('input', updateForceLabels);
+    force2Slider.addEventListener('input', updateForceLabels);
+    startBtn.addEventListener('click', startSimulation);
+    resetBtn.addEventListener('click', resetSimulation);
+
+    updateForceLabels();
+  </script>
+
+</body>
+</html>

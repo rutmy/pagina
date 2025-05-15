@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leyes de Newton - Exploración Interactiva</title>
+  <style>
+    :root {
+      --primary-color: #4D79FF;
+      --secondary-color: #37C9C6;
+      --accent-color: #FF4D8D;
+      --gradient-bg: linear-gradient(135deg, #3a7bd5, #3a6073);
+      --light-bg: #F0FAFA;
+      --dark-text: #333;
+      --light-text: #fff;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background: var(--gradient-bg);
+      color: var(--dark-text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 20px 0;
+    }
+    
+    header h1 {
+      color: var(--light-text);
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 8px;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    
+    .nav-link {
+      color: var(--light-text);
+      padding: 10px 20px;
+      margin: 0 5px;
+      border-radius: 8px;
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card {
+      background-color: var(--light-bg);
+      border-radius: 15px;
+      box-shadow: var(--card-shadow);
+      padding: 30px;
+      margin-bottom: 30px;
+      transition: var(--transition);
+    }
+    
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card h2 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+    
+    .card p {
+      margin-bottom: 15px;
+    }
+    
+    .btn {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: var(--light-text);
+      padding: 12px 25px;
+      border-radius: 30px;
+      margin-top: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    
+    .btn:hover {
+      background-color: #3A66D9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(77, 121, 255, 0.3);
+    }
+    
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin: 30px 0;
+    }
+    
+    .feature-item {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      transition: var(--transition);
+    }
+    
+    .feature-item:hover {
+      transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+      width: 50px;
+      height: 50px;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: rgba(55, 201, 198, 0.1);
+      color: var(--secondary-color);
+      font-size: 24px;
+    }
+    
+    .feature-title {
+      color: var(--dark-text);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    .simulator {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 30px 0;
+      box-shadow: var(--card-shadow);
+    }
+    
+    .simulator h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+    
+    .simulator-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+    
+    .simulation-result {
+      background-color: var(--light-bg);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    
+    .canvas-container {
+      width: 100%;
+      height: 300px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      margin: 20px 0;
+    }
+    
+    canvas {
+      display: block;
+    }
+    
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .tab-btn {
+      padding: 12px 20px;
+      margin: 0 5px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 30px;
+      color: var(--light-text);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    
+    .tab-btn:hover, .tab-btn.active {
+      background-color: var(--primary-color);
+    }
+    
+    .law-tab {
+      display: none;
+    }
+    
+    .law-tab.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+    
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      color: var(--light-text);
+      font-size: 0.9rem;
+    }
+    
+    /* Simuladores */
+    .car {
+      width: 80px;
+      height: 40px;
+      background-color: var(--accent-color);
+      border-radius: 6px;
+      position: absolute;
+      top: 220px;
+      left: 50px;
+      transition: transform 0.1s linear;
+    }
+    
+    .car:before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 15px;
+      width: 50px;
+      height: 20px;
+      background-color: rgba(255, 77, 141, 0.7);
+      border-radius: 50% 50% 0 0;
+    }
+    
+    .car .wheel {
+      width: 16px;
+      height: 16px;
+      background-color: #222;
+      border-radius: 50%;
+      position: absolute;
+      bottom: -8px;
+    }
+    
+    .car .wheel.front {
+      right: 10px;
+    }
+    
+    .car .wheel.back {
+      left: 10px;
+    }
+    
+    .road {
+      position: absolute;
+      bottom: 30px;
+      width: 100%;
+      height: 10px;
+      background-color: #555;
+    }
+    
+    .rocket {
+      width: 40px;
+      height: 90px;
+      background: linear-gradient(to bottom, #ff9500, #ff5e3a);
+      position: absolute;
+      bottom: 50px;
+      left: calc(50% - 20px);
+      border-radius: 50% 50% 0 0;
+    }
+    
+    .rocket:before {
+      content: "";
+      position: absolute;
+      bottom: -15px;
+      left: 5px;
+      width: 30px;
+      height: 20px;
+      background-color: #ff3b30;
+      clip-path: polygon(0 0, 50% 100%, 100% 0);
+    }
+    
+    .rocket .window {
+      width: 15px;
+      height: 15px;
+      background-color: #85c5e5;
+      border-radius: 50%;
+      position: absolute;
+      top: 15px;
+      left: 12.5px;
+    }
+    
+    .rocket .fin {
+      width: 12px;
+      height: 25px;
+      background-color: #ff5e3a;
+      position: absolute;
+      bottom: 20px;
+    }
+    
+    .rocket .fin.left {
+      left: -10px;
+      transform: skewY(30deg);
+    }
+    
+    .rocket .fin.right {
+      right: -10px;
+      transform: skewY(-30deg);
+    }
+    
+    .rocket .flame {
+      width: 20px;
+      height: 30px;
+      background: linear-gradient(to bottom, #ffcc00, #ff9500);
+      position: absolute;
+      bottom: -30px;
+      left: 10px;
+      border-radius: 50% 50% 20% 20%;
+      transform-origin: center top;
+      animation: flicker 0.3s infinite alternate;
+      opacity: 0;
+    }
+    
+    @keyframes flicker {
+      0% { height: 30px; opacity: 0.8; }
+      100% { height: 40px; opacity: 1; }
+    }
+    
+    .balls-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 200px;
+      position: relative;
+    }
+    
+    .ball {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: relative;
+      transition: transform 0.5s;
+    }
+    
+    .ball.left {
+      background-color: #4D79FF;
+      left: 0;
+    }
+    
+    .ball.right {
+      background-color: #FF4D8D;
+      right: 0;
+    }
+    
+    .force-arrow {
+      position: absolute;
+      height: 4px;
+      background-color: #28a745;
+      transform-origin: center left;
+    }
+    
+    .force-arrow:after {
+      content: "";
+      position: absolute;
+      right: -10px;
+      top: -8px;
+      border-left: 10px solid #28a745;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+    }
+    
+    .force-label {
+      position: absolute;
+      font-size: 12px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .simulator-controls {
+        flex-direction: column;
+      }
+      
+      .nav {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Las Leyes de Newton</h1>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Inicio -->
+    <section id="inicio" class="tab-content active">
+      <div class="card">
+        <h2>Introducción a la Mecánica Newtoniana</h2>
+        <p>Las Leyes de Newton constituyen el pilar fundamental de la mecánica clásica y describen con precisión la relación entre las fuerzas que actúan sobre un cuerpo y el movimiento resultante. Publicadas por Sir Isaac Newton en 1687 en su obra magistral "Philosophiæ Naturalis Principia Mathematica", estas leyes revolucionaron nuestra comprensión del universo físico.</p>
+        
+        <p>Sir Isaac Newton (1643-1727) fue un físico, matemático, astrónomo, teólogo y autor inglés, considerado uno de los científicos más influyentes de todos los tiempos. Sus contribuciones a la física y las matemáticas sentaron las bases del conocimiento científico moderno y su influencia perdura hasta nuestros días.</p>
+      </div>
+      <div class="law-tabs">
+        <div id="fundamentos" class="law-tab active">
+          <div class="feature-grid">
+            <div class="feature-item">
+              <div class="feature-icon">📚</div>
+              <h3 class="feature-title">Fundamento de la Física</h3>
+              <p>Las leyes de Newton son la base sobre la que se construye toda la mecánica clásica, permitiéndonos predecir el movimiento de los objetos bajo la influencia de fuerzas.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🧮</div>
+              <h3 class="feature-title">Precisión Matemática</h3>
+              <p>Proporcionan un marco matemático preciso que permite calcular trayectorias, velocidades y aceleraciones de objetos en movimiento.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🌍</div>
+              <h3 class="feature-title">Visión Universal</h3>
+              <p>Newton estableció que las mismas leyes físicas que operan en la Tierra también aplican a los cuerpos celestes, unificando la física terrestre y celeste.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div id="aplicaciones" class="law-tab">
+          <div class="feature-grid">
+            <div class="feature-item">
+              <div class="feature-icon">🚀</div>
+              <h3 class="feature-title">Exploración Espacial</h3>
+              <p>Las leyes de Newton son fundamentales para calcular las trayectorias de cohetes, satélites y sondas espaciales en sus misiones.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🚗</div>
+              <h3 class="feature-title">Ingeniería Automotriz</h3>
+              <p>El diseño de vehículos, sistemas de frenado y seguridad se basa en la aplicación directa de estas leyes físicas.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🏗️</div>
+              <h3 class="feature-title">Arquitectura y Construcción</h3>
+              <p>Los ingenieros aplican estos principios para garantizar la estabilidad estructural de edificios y puentes.</p>
+            </div>
+          </div>
+        </div>
+        
+        <div id="educacion" class="law-tab">
+          <div class="feature-grid">
+            <div class="feature-item">
+              <div class="feature-icon">🧠</div>
+              <h3 class="feature-title">Desarrollo del Pensamiento Científico</h3>
+              <p>El estudio de las leyes de Newton fomenta el razonamiento lógico y la comprensión del método científico.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🔬</div>
+              <h3 class="feature-title">Base para Estudios Avanzados</h3>
+              <p>Dominar estos conceptos es esencial para progresar en campos como ingeniería, física, astronomía y más.</p>
+            </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">🌱</div>
+              <h3 class="feature-title">Comprensión del Mundo Natural</h3>
+              <p>Estas leyes nos ayudan a entender fenómenos cotidianos, desde el movimiento de los objetos hasta el funcionamiento de herramientas simples.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Las Tres Leyes de Newton</h2>
+        <p>Las leyes de Newton son tres principios físicos fundamentales que, junto con sus definiciones, establecieron las bases de la mecánica clásica:</p>
+        
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">1️⃣</div>
+            <h3 class="feature-title">Primera Ley: Ley de Inercia</h3>
+            <p>"Todo cuerpo persevera en su estado de reposo o movimiento uniforme y rectilíneo a no ser que sea obligado a cambiar su estado por fuerzas impresas sobre él."</p>
+            <a href="simulador-1.html" class="btn">simulador</a>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">2️⃣</div>
+            <h3 class="feature-title">Segunda Ley: Ley de Fuerza</h3>
+            <p>"El cambio de movimiento es proporcional a la fuerza motriz impresa y ocurre según la línea recta a lo largo de la cual aquella fuerza se imprime."</p>
+            <a href="simulador-2.html" class="btn">simulador</a>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">3️⃣</div>
+            <h3 class="feature-title">Tercera Ley: Ley de Acción y Reacción</h3>
+            <p>"Con toda acción ocurre siempre una reacción igual y contraria: o sea, las acciones mutuas de dos cuerpos siempre son iguales y dirigidas en sentido opuesto."</p>
+            <a href="simulador3.html" class="btn">simulador</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Primera Ley -->
+    <section id="primera-ley" class="tab-content">
+      <div class="card">
+        <h2>Primera Ley de Newton: Ley de Inercia</h2>
+        <p><strong>"Todo cuerpo persevera en su estado de reposo o movimiento uniforme y rectilíneo a no ser que sea obligado a cambiar su estado por fuerzas impresas sobre él."</strong></p>
+        
+        <p>Esta ley, también conocida como Principio de Inercia, establece que un objeto permanecerá en reposo o en movimiento rectilíneo uniforme (es decir, con velocidad constante) a menos que actúe sobre él una fuerza externa.</p>
+        
+        <p>La inercia es la resistencia que oponen los objetos a modificar su estado de movimiento. Es una propiedad fundamental de la materia y está directamente relacionada con la masa del objeto: a mayor masa, mayor inercia.</p>
+      </div>
+      
+      <div class="card">
+        <h2>Implicaciones de la Primera Ley</h2>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🧲</div>
+            <h3 class="feature-title">Sistemas Inerciales</h3>
+            <p>La primera ley define los marcos de referencia inerciales: aquellos donde un objeto sin fuerzas externas permanece en reposo o movimiento rectilíneo uniforme.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">⚖️</div>
+            <h3 class="feature-title">Masa Inercial</h3>
+            <p>La masa inercial es una medida de la resistencia de un objeto a cambiar su estado de movimiento cuando se le aplica una fuerza.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">🚦</div>
+            <h3 class="feature-title">Ejemplo Cotidiano</h3>
+            <p>Cuando un vehículo frena bruscamente, los pasajeros sienten que son impulsados hacia adelante debido a que sus cuerpos tienden a mantener el estado de movimiento.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="simulator">
+        <h3>Simulador de la Primera Ley de Newton: Automóvil en Movimiento</h3>
+        <p>Este simulador muestra cómo un automóvil persiste en su estado de movimiento a menos que actúe una fuerza externa (como la fricción) sobre él.</p>
+        
+        <div class="simulator-controls">
+          <div class="form-group">
+            <label for="initial-velocity">Velocidad Inicial (m/s):</label>
+            <input type="number" id="initial-velocity" value="5" min="0" max="20" step="1">
+          </div>
+          
+          <div class="form-group">
+            <label for="friction">Coeficiente de Fricción:</label>
+            <input type="range" id="friction" min="0" max="1" step="0.01" value="0">
+            <span id="friction-value">0</span>
+          </div>
+        </div>
+        
+        <button class="btn" id="start-simulation">Iniciar Simulación</button>
+        <button class="btn" id="reset-simulation">Reiniciar</button>
+        
+        <div class="canvas-container">
+          <div class="road"></div>
+          <div class="car" id="simulation-car">
+            <div class="wheel front"></div>
+            <div class="wheel back"></div>
+          </div>
+        </div>
+        
+        <div class="simulation-result">
+          <p>Velocidad actual: <span id="current-velocity">5</span> m/s</p>
+          <p>Distancia recorrida: <span id="distance-traveled">0</span> m</p>
+          <p><strong>Observaciones:</strong> Con el coeficiente de fricción igual a cero, el automóvil continuará moviéndose con velocidad constante indefinidamente, demostrando la ley de inercia. Al aumentar la fricción, se introduce una fuerza que gradualmente reduce la velocidad hasta detener el vehículo.</p>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h2>Ejemplos de la Primera Ley en Acción</h2>
+        <ul>
+          <li><strong>Cinturones de seguridad:</strong> Su uso se basa en la primera ley, ya que evitan que los ocupantes continúen moviéndose hacia adelante (siguiendo su inercia) cuando el vehículo se detiene bruscamente.</li>
+          <li><strong>Maniobras espaciales:</strong> Los astronautas que empujan un objeto en el espacio observan que éste continúa moviéndose indefinidamente con velocidad constante debido a la ausencia de fuerzas de fricción.</li>
+          <li><strong>Trucos de magia:</strong> Cuando un mago retira rápidamente un mantel de una mesa sin mover los objetos que están sobre él, aprovecha la inercia de estos objetos para mantenerlos en su lugar.</li>
+          <li><strong>Deportes:</strong> Un patinador sobre hielo puede deslizarse por largas distancias con poco esfuerzo debido a la baja fricción entre los patines y el hielo, lo que ilustra la tendencia de los cuerpos a mantener su movimiento.</li>
+        </ul>
+      </div>
+      
+      <button class="btn" onclick="changeTab('inicio')">Volver al Inicio</button>
+    </section>
+
+    <!-- Segunda Ley -->
+    <section id="segunda-ley" class="tab-content">
+      <div class="card">
+        <h2>Segunda Ley de Newton: Ley de Fuerza</h2>
+        <p><strong>"El cambio de movimiento es proporcional a la fuerza motriz impresa y ocurre según la línea recta a lo largo de la cual aquella fuerza se imprime."</strong></p>
+        
+        <p>En terminología moderna, la segunda ley establece que la aceleración de un objeto es directamente proporcional a la fuerza neta que actúa sobre él e inversamente proporcional a su masa. Se expresa matemáticamente como:</p>
+        
+        <div style="text-align: center; padding: 20px; font-size: 1.8rem; font-weight: bold;">
+          F = m · a
+        </div>
+        
+        <p>Donde:</p>
+        <ul>
+          <li><strong>F</strong> es la fuerza neta aplicada (en newtons, N)</li>
+          <li><strong>m</strong> es la masa del objeto (en kilogramos, kg)</li>
+          <li><strong>a</strong> es la aceleración resultante (en metros por segundo al cuadrado, m/s²)</li>
+        </ul>
+      </div>
+      
+      <div class="card">
+        <h2>Implicaciones de la Segunda Ley</h2>
+        <div class="feature-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🏋️</div>
+            <h3 class="feature-title">Proporcionalidad</h3>
+            <p>A mayor fuerza aplicada sobre un objeto de masa constante, mayor será su aceleración.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">⚖️</div>
+            <h3 class="feature-title">Relación con la Masa</h3>
+            <p>Para una misma fuerza, un objeto más masivo experimentará menor aceleración que uno menos masivo.</p>
+          </div>
+          
+          <div class="feature-item">
+            <div class="feature-icon">↗️</div>
+            <h3 class="feature-title">Vectorialidad</h3>
+            <p>La aceleración tiene la misma dirección y sentido que la fuerza neta aplicada sobre el objeto.</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="simulator">
+        <h3>Simulador de la Segunda Ley de Newton: Cohete en Despegue</h3>
+        <p>Este simulador muestra cómo un cohete acelera en función de la fuerza de empuje y su masa.</p>
+        
+        <div class="simulator-controls">
+          <div class="form-group">
+            <label for="rocket-mass">Masa del Cohete (kg):</label>
+            <input type="number" id="rocket-mass" value="1000" min="100" max="10000" step="100">
+          </div>
+          
+          <div class="form-group">
+            <label for="thrust-force">Fuerza de Empuje (N):</label>
+            <input type="number" id="thrust-force" value="20000" min="5000" max="100000" step="1000">
+          </div>
+        </div>
+        
+        <button class="btn" id="calculate-acceleration">Calcular Aceleración</button>
+        <button class="btn" id="launch-rocket">Iniciar Lanzamiento</button>
+        <button class="

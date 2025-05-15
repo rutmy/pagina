@@ -1,0 +1,177 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #34495e;
+}
+
+/* Reset general */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #fcf9f7;
+    color: var(--dark-color);
+    line-height: 1.6;
+    font-size: clamp(14px, 2vw, 18px);
+    padding: 20px;
+    text-align: center;
+}
+
+.container {
+    background: #e2e1e6;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 800px;
+    margin: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #2c3e50;
+}
+
+.button {
+    display: inline-block;
+    margin: 10px;
+    padding: 12px 20px;
+    background-color: #154564;
+    color: rgb(218, 214, 214);
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+input {
+    margin: 5px;
+    padding: 8px;
+}
+
+canvas {
+    background: #ebe8e8;
+    border: 1px solid #a16262;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.result {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #132333;
+}
+
+/* Pantalla inicial */
+.pantalla-inicial {
+    height: 100vh;
+    background: url(img-principal.jpg) center center no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor {
+    text-align: center;
+    padding: 20px;
+    background-color: #e2ddd8;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón */
+.boton-redireccion {
+    background-color: #416c88;
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+    margin-top: 20px;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.boton-redireccion:hover {
+    background-color: #5181a3;
+}
+
+/* Header */
+header {
+    background-color: var(--secondary-color);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Navegación */
+nav {
+    background-color: var(--primary-color);
+}
+
+nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+nav li {
+    margin: 0.5rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Contenido principal */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.intro {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.intro h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+/* Leyes */
+.laws-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.law-section {
+    flex: 1;
+    min-width: 300px;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.law-section h2 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}

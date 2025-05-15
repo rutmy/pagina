@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calculadora Tercera Ley de Newton</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      color: #1e293b;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-weight: 700;
+      text-align: center;
+      color: #0f172a;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    input[type=number] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 5px;
+      font-size: 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    input[type=number]:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background-color: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1e40af;
+    }
+
+    .result {
+      margin-top: 25px;
+      background-color: #e0f2fe;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      font-weight: 700;
+      text-align: center;
+      min-height: 50px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Calculadora Tercera Ley de Newton</h1>
+    
+    <label for="mass">Masa del objeto (kg):</label>
+    <input type="number" id="mass" min="0.1" step="0.1" value="1" />
+
+    <label for="deltaV">Cambio de velocidad (m/s):</label>
+    <input type="number" id="deltaV" min="0.1" step="0.1" value="5" />
+
+    <label for="deltaT">Tiempo del cambio (s):</label>
+    <input type="number" id="deltaT" min="0.01" step="0.01" value="2" />
+
+    <button onclick="calcularFuerzas()">Calcular Fuerzas</button>
+
+    <div class="result" id="resultado"></div>
+  </div>
+
+  <script>
+    function calcularFuerzas() {
+      const masa = parseFloat(document.getElementById('mass').value);
+      const deltaV = parseFloat(document.getElementById('deltaV').value);
+      const deltaT = parseFloat(document.getElementById('deltaT').value);
+      const resultado = document.getElementById('resultado');
+
+      if (masa > 0 && deltaV > 0 && deltaT > 0) {
+        const aceleracion = deltaV / deltaT;
+        const fuerza = masa * aceleracion;
+        resultado.innerHTML =
+          `Fuerza de acción: <span style="color:#1e40af;">${fuerza.toFixed(2)} N</span><br>` +
+          `Fuerza de reacción: <span style="color:#dc2626;">${(-fuerza).toFixed(2)} N</span>`;
+      } else {
+        resultado.textContent = "Por favor, ingresa valores válidos mayores que cero.";
+      }
+    }
+  </script>
+
+</body>
+</html>
+
