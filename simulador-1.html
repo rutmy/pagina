@@ -2,131 +2,296 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Calculadora Tercera Ley de Newton</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulador Primera Ley de Newton</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Arial, sans-serif;
       background: #f0f4f8;
       margin: 0;
-      padding: 40px 20px;
+      padding: 20px;
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
       color: #1e293b;
     }
 
-    .container {
-      background: white;
-      padding: 30px 25px;
-      border-radius: 12px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-      max-width: 400px;
-      width: 100%;
-    }
-
-    h1 {
-      margin-top: 0;
-      font-weight: 700;
-      text-align: center;
-      color: #0f172a;
-      margin-bottom: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-      color: #334155;
-    }
-
-    input[type=number] {
-      width: 100%;
-      padding: 10px 12px;
-      margin-top: 5px;
-      font-size: 16px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      box-sizing: border-box;
-      transition: border-color 0.3s ease;
-    }
-
-    input[type=number]:focus {
-      outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
-    }
-
-    button {
-      margin-top: 25px;
-      width: 100%;
-      padding: 12px;
-      background-color: #2563eb;
+    /* Botón regresar */
+    .back-button {
+      align-self: flex-start;
+      margin-bottom: 15px;
+      background-color: #94a3b8;
+      color: white;
       border: none;
       border-radius: 8px;
-      color: white;
-      font-size: 16px;
+      padding: 8px 16px;
       font-weight: 700;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+    .back-button:hover {
+      background-color: #64748b;
+    }
 
-    button:hover {
+    h1 {
+      margin-bottom: 15px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      max-width: 450px;
+      width: 100%;
+      padding: 25px 30px;
+      margin-bottom: 25px;
+    }
+
+    .description {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #475569;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #334155;
+      display: block;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      cursor: pointer;
+    }
+
+    .value-display {
+      font-weight: 700;
+      color: #2563eb;
+      margin-left: 8px;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+    }
+
+    button:hover:not(:disabled) {
       background-color: #1e40af;
     }
 
-    .result {
-      margin-top: 25px;
-      background-color: #e0f2fe;
-      padding: 15px;
+    button:disabled {
+      background-color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .simulator-track {
+      position: relative;
+      width: 100%;
+      max-width: 850px;
+      height: 80px;
+      background: #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+    }
+
+    .track-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #2563eb;
+      transform: translateY(-50%);
+    }
+
+    .block {
+      position: absolute;
+      top: 50%;
+      left: 50px;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      background-color: #10b981;
+      color: white;
+      font-size: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border-radius: 8px;
-      border: 1px solid #bae6fd;
-      color: #0369a1;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .info {
+      margin-top: 20px;
       font-weight: 700;
       text-align: center;
-      min-height: 50px;
+      color: #334155;
+      min-height: 24px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Calculadora Tercera Ley de Newton</h1>
-    
-    <label for="mass">Masa del objeto (kg):</label>
-    <input type="number" id="mass" min="0.1" step="0.1" value="1" />
+  <button class="back-button" onclick="window.history.back()">← Regresar</button>
 
-    <label for="deltaV">Cambio de velocidad (m/s):</label>
-    <input type="number" id="deltaV" min="0.1" step="0.1" value="5" />
+  <div class="panel">
+    <h1>Simulador Primera Ley de Newton</h1>
+    <p class="description">
+      La primera ley de Newton indica que un objeto en reposo permanecerá en reposo, y un objeto en movimiento se mantendrá en movimiento a velocidad constante y en línea recta, a menos que actúe una fuerza externa sobre él.
+      <br><br>
+      Usa este simulador para observar cómo un objeto se comporta cuando no se aplica fuerza y cuando se aplica una fuerza externa.
+    </p>
+  </div>
 
-    <label for="deltaT">Tiempo del cambio (s):</label>
-    <input type="number" id="deltaT" min="0.01" step="0.01" value="2" />
+  <div class="simulator">
+    <h2>Simulación Interactiva</h2>
 
-    <button onclick="calcularFuerzas()">Calcular Fuerzas</button>
+    <div class="controls">
+      <label for="forceRange">Fuerza aplicada (N): <span id="forceValue" class="value-display">0</span></label>
+      <input type="range" id="forceRange" min="0" max="50" value="0" step="1" />
 
-    <div class="result" id="resultado"></div>
+      <label for="massRange">Masa del objeto (kg): <span id="massValue" class="value-display">5</span></label>
+      <input type="range" id="massRange" min="1" max="20" value="5" step="1" />
+    </div>
+
+    <button id="startBtn">Iniciar Simulación</button>
+    <button id="resetBtn">Reiniciar Simulación</button>
+
+    <div class="simulator-track" aria-label="Pista de simulación">
+      <div class="track-line"></div>
+      <div class="block" id="block" aria-label="Objeto moviéndose">📦</div>
+    </div>
+
+    <div class="info" id="accelerationInfo">Aceleración: 0.00 m/s²</div>
+    <div class="info" id="velocityInfo">Velocidad: 0.00 m/s</div>
+    <div class="info" id="distanceInfo">Distancia recorrida: 0.00 m</div>
   </div>
 
   <script>
-    function calcularFuerzas() {
-      const masa = parseFloat(document.getElementById('mass').value);
-      const deltaV = parseFloat(document.getElementById('deltaV').value);
-      const deltaT = parseFloat(document.getElementById('deltaT').value);
-      const resultado = document.getElementById('resultado');
+    const forceRange = document.getElementById('forceRange');
+    const massRange = document.getElementById('massRange');
+    const forceValue = document.getElementById('forceValue');
+    const massValue = document.getElementById('massValue');
 
-      if (masa > 0 && deltaV > 0 && deltaT > 0) {
-        const aceleracion = deltaV / deltaT;
-        const fuerza = masa * aceleracion;
-        resultado.innerHTML =
-          `Fuerza de acción: <span style="color:#1e40af;">${fuerza.toFixed(2)} N</span><br>` +
-          `Fuerza de reacción: <span style="color:#dc2626;">${(-fuerza).toFixed(2)} N</span>`;
-      } else {
-        resultado.textContent = "Por favor, ingresa valores válidos mayores que cero.";
-      }
+    const startBtn = document.getElementById('startBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const block = document.getElementById('block');
+    const track = document.querySelector('.simulator-track');
+
+    const accelerationInfo = document.getElementById('accelerationInfo');
+    const velocityInfo = document.getElementById('velocityInfo');
+    const distanceInfo = document.getElementById('distanceInfo');
+
+    let animationId = null;
+    let velocity = 0;
+    let distance = 0;
+    let acceleration = 0;
+    const deltaTime = 0.02; // seconds per frame approx ~50fps
+
+    // Maximum position the block can move to (limit)
+    function getMaxPosition() {
+      const trackRect = track.getBoundingClientRect();
+      return trackRect.width - 50 - block.offsetWidth; // 50px left margin
     }
+
+    // Update displayed slider values
+    forceRange.addEventListener('input', () => {
+      forceValue.textContent = forceRange.value;
+    });
+    massRange.addEventListener('input', () => {
+      massValue.textContent = massRange.value;
+    });
+
+    startBtn.addEventListener('click', () => {
+      // Reset simulation values
+      velocity = 0;
+      distance = 0;
+      block.style.left = '50px';
+      accelerationInfo.textContent = 'Aceleración: 0.00 m/s²';
+      velocityInfo.textContent = 'Velocidad: 0.00 m/s';
+      distanceInfo.textContent = 'Distancia recorrida: 0.00 m';
+
+      const force = parseFloat(forceRange.value);
+      const mass = parseFloat(massRange.value);
+
+      // Calculate acceleration (f = m * a => a = f/m)
+      acceleration = force / mass;
+
+      accelerationInfo.textContent = `Aceleración: ${acceleration.toFixed(2)} m/s²`;
+
+      if (force === 0) {
+        // If no force, object stays still (represents reposo sin fuerza)
+        alert("No se aplica fuerza, el objeto permanecerá en reposo (Primera Ley de Newton).");
+        return;
+      }
+
+      startBtn.disabled = true;
+      animate();
+    });
+
+    function animate() {
+      velocity += acceleration * deltaTime;
+      distance += velocity * deltaTime;
+
+      // Move block horizontally (scale distance by 15 for display)
+      let posX = 50 + distance * 15;
+      const maxPos = getMaxPosition();
+      if (posX >= maxPos) {
+        posX = maxPos; // Stop at the maximum position
+        block.style.left = posX + 'px';
+        velocityInfo.textContent = `Velocidad: ${velocity.toFixed(2)} m/s (límite alcanzado)`;
+        distanceInfo.textContent = `Distancia recorrida: ${distance.toFixed(2)} m`;
+        startBtn.disabled = false;
+        cancelAnimationFrame(animationId);
+        return;
+      }
+
+      block.style.left = posX + 'px';
+
+      velocityInfo.textContent = `Velocidad: ${velocity.toFixed(2)} m/s`;
+      distanceInfo.textContent = `Distancia recorrida: ${distance.toFixed(2)} m`;
+
+      animationId = requestAnimationFrame(animate);
+    }
+
+    resetBtn.addEventListener('click', () => {
+      // Reset simulation values
+      cancelAnimationFrame(animationId);
+      velocity = 0;
+      distance = 0;
+      block.style.left = '50px';
+      accelerationInfo.textContent = 'Aceleración: 0.00 m/s²';
+      velocityInfo.textContent = 'Velocidad: 0.00 m/s';
+      distanceInfo.textContent = 'Distancia recorrida: 0.00 m';
+      startBtn.disabled = false;
+    });
+
+    // Reset simulation on page load
+    window.addEventListener('load', () => {
+      forceValue.textContent = forceRange.value;
+      massValue.textContent = massRange.value;
+      block.style.left = '50px';
+    });
   </script>
 
 </body>
 </html>
-
