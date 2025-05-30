@@ -123,18 +123,47 @@
       “A toda acción siempre hay una reacción igual y contraria.” Esto significa que si un objeto A ejerce una fuerza sobre un objeto B, el objeto B ejercerá una fuerza de igual magnitud pero en sentido opuesto sobre el objeto A.
     </p>
 
-    <div class="controls">
-      <label>Fuerza Objeto 1 (N): <span id="force1Val">10</span></label><br />
-      <input type="range" id="force1" min="5" max="30" value="10" class="slider"><br /><br />
+    <style>
+  /* Estilo unificado para todos los botones y enlaces con clase .button */
+  .button {
+    margin: 10px 5px 0 0;
+    padding: 10px 15px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+  }
 
-      <label>Fuerza Objeto 2 (N): <span id="force2Val">10</span></label><br />
-      <input type="range" id="force2" min="5" max="30" value="10" class="slider"><br /><br />
+  .button:hover {
+    background-color: #1e40af;
+  }
 
-      <button id="startBtn" class="button">Iniciar Simulación</button>
-        <button id="startBtn" class="button">Reiniciar</button>
-      <a href="index.html" class="button">Volver al Inicio</a>
+  .button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+  }
+</style>
+
+<div class="controls">
+  <label>Fuerza Objeto 1 (N): <span id="force1Val">10</span></label>
+  <input type="range" id="force1" min="5" max="30" value="10" class="slider">
+
+  <label>Fuerza Objeto 2 (N): <span id="force2Val">10</span></label>
+  <input type="range" id="force2" min="5" max="30" value="10" class="slider">
+
+  <div>
+    <button class="button" onclick="window.history.back()">← Regresar</button>
+    <button id="startBtn" class="button">Iniciar Simulación</button>
+    <button id="resetBtn" class="button">Reiniciar</button>
     <a href="calculadora-3.html" class="button">Calculadora</a>
-    </div>
+  </div>
+</div>
+
 
     <div class="arena">
       <div id="ball1" class="ball ball1" style="left: 100px;">1</div>
