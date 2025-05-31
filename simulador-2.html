@@ -246,15 +246,19 @@
       distance += velocity * delta;
 
       const pos = 50 + distance * 15; // Escala de movimiento
-      block.style.left = pos + 'px';
+      if (pos < 50) {
+        block.style.left = '50px'; // Limite izquierdo
+        velocity = -velocity; // Invertir dirección
+      } else if (pos > 800) {
+        block.style.left = '800px'; // Limite derecho
+        velocity = -velocity; // Invertir dirección
+      } else {
+        block.style.left = pos + 'px';
+      }
 
       distanceDisplay.textContent = distance.toFixed(2);
 
-      if (pos < 950) {
-        animationId = requestAnimationFrame(animate);
-      } else {
-        startBtn.disabled = false;
-      }
+      animationId = requestAnimationFrame(animate);
     }
 
     // Calcular aceleración inicial al cargar
@@ -263,3 +267,5 @@
 
 </body>
 </html>
+
+
