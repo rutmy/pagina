@@ -6,13 +6,13 @@
   <title>Leyes de Newton - Exploración Interactiva</title>
   <style>
     :root {
-      --primary-color: #4D79FF;
-      --secondary-color: #37C9C6;
-      --accent-color: #FF4D8D;
-      --gradient-bg: linear-gradient(135deg, #3a7bd5, #3a6073);
-      --light-bg: #F0FAFA;
+      --primary-color: #3768fa;
+      --secondary-color: #79e4e4;
+      --accent-color: #9c6b7d;
+      --gradient-bg: linear-gradient(135deg, #85a7d6, #8ccbe4);
+      --light-bg: #ccddf1;
       --dark-text: #333;
-      --light-text: #fff;
+      --light-text: #f3f3f3;
       --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       --transition: all 0.3s ease;
     }
@@ -30,8 +30,19 @@
       line-height: 1.6;
       min-height: 100vh;
     }
+    body {
+        font-family: Arial, sans-serif;
+        background: var(--gradient-bg);
+        background-image: url('img-1.jpg'); /* Agrega la imagen de fondo */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: var(--dark-text);
+        line-height: 1.6;
+        min-height: 100vh;
+}
     
-    a {
+    a { 
       color: var(--secondary-color);
       text-decoration: none;
       font-weight: 600;
@@ -131,7 +142,7 @@
     }
     
     .btn:hover {
-      background-color: #3A66D9;
+      background-color: #a9b5cf;
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(77, 121, 255, 0.3);
     }
@@ -164,7 +175,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      background-color: rgba(55, 201, 198, 0.1);
+      background-color: rgba(197, 230, 229, 0.1);
       color: var(--secondary-color);
       font-size: 24px;
     }
@@ -223,7 +234,7 @@
     .canvas-container {
       width: 100%;
       height: 300px;
-      background-color: #f5f5f5;
+      background-color: #eee4e4;
       border-radius: 8px;
       overflow: hidden;
       position: relative;
@@ -343,7 +354,7 @@
     .rocket .window {
       width: 15px;
       height: 15px;
-      background-color: #85c5e5;
+      background-color: #cadfe9;
       border-radius: 50%;
       position: absolute;
       top: 15px;
@@ -403,7 +414,7 @@
     }
     
     .ball.left {
-      background-color: #4D79FF;
+      background-color: #c9d3f0;
       left: 0;
     }
     
@@ -489,48 +500,6 @@
             </div>
           </div>
         </div>
-        
-        <div id="aplicaciones" class="law-tab">
-          <div class="feature-grid">
-            <div class="feature-item">
-              <div class="feature-icon">🚀</div>
-              <h3 class="feature-title">Exploración Espacial</h3>
-              <p>Las leyes de Newton son fundamentales para calcular las trayectorias de cohetes, satélites y sondas espaciales en sus misiones.</p>
-            </div>
-            
-            <div class="feature-item">
-              <div class="feature-icon">🚗</div>
-              <h3 class="feature-title">Ingeniería Automotriz</h3>
-              <p>El diseño de vehículos, sistemas de frenado y seguridad se basa en la aplicación directa de estas leyes físicas.</p>
-            </div>
-            
-            <div class="feature-item">
-              <div class="feature-icon">🏗️</div>
-              <h3 class="feature-title">Arquitectura y Construcción</h3>
-              <p>Los ingenieros aplican estos principios para garantizar la estabilidad estructural de edificios y puentes.</p>
-            </div>
-          </div>
-        </div>
-        
-        <div id="educacion" class="law-tab">
-          <div class="feature-grid">
-            <div class="feature-item">
-              <div class="feature-icon">🧠</div>
-              <h3 class="feature-title">Desarrollo del Pensamiento Científico</h3>
-              <p>El estudio de las leyes de Newton fomenta el razonamiento lógico y la comprensión del método científico.</p>
-            </div>
-            
-            <div class="feature-item">
-              <div class="feature-icon">🔬</div>
-              <h3 class="feature-title">Base para Estudios Avanzados</h3>
-              <p>Dominar estos conceptos es esencial para progresar en campos como ingeniería, física, astronomía y más.</p>
-            </div>
-            
-            <div class="feature-item">
-              <div class="feature-icon">🌱</div>
-              <h3 class="feature-title">Comprensión del Mundo Natural</h3>
-              <p>Estas leyes nos ayudan a entender fenómenos cotidianos, desde el movimiento de los objetos hasta el funcionamiento de herramientas simples.</p>
-            </div>
           </div>
         </div>
       </div>

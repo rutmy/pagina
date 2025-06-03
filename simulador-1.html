@@ -7,13 +7,20 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f4f8;
+      background: var(--gradient-bg);
+      background-image: url('img-2.jpg'); /* Agrega la imagen de fondo */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #1e293b;
+      line-height: 1.6;
+      min-height: 100vh;
       margin: 0;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #1e293b;
+      justify-content: center; /* Centrar verticalmente */
     }
 
     /* Botón regresar */
@@ -45,6 +52,7 @@
       width: 100%;
       padding: 25px 30px;
       margin-bottom: 25px;
+      text-align: center; /* Centrar texto */
     }
 
     .description {
@@ -54,11 +62,26 @@
       margin-bottom: 20px;
     }
 
+    .simulator {
+      background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+      border-radius: 15px;
+      padding: 20px;
+      margin: 30px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 850px; /* Ancho máximo del simulador */
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centrar contenido horizontalmente */
+    }
+
     .controls {
       display: flex;
       flex-direction: column;
       gap: 15px;
       margin-bottom: 20px;
+      width: 100%;
+      max-width: 500px;
     }
 
     label {
@@ -90,6 +113,7 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
       width: 100%;
+      max-width: 300px;
     }
 
     button:hover:not(:disabled) {
@@ -110,6 +134,7 @@
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid #cbd5e1;
+      margin-top: 10px;
     }
 
     .track-line {
@@ -146,6 +171,8 @@
       text-align: center;
       color: #334155;
       min-height: 24px;
+      width: 100%;
+      max-width: 850px;
     }
   </style>
 </head>
@@ -295,4 +322,5 @@
 
 </body>
 </html>
+
 

@@ -7,13 +7,20 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f0f4f8;
+      background: var(--gradient-bg);
+      background-image: url('img-2.jpg'); /* Agrega la imagen de fondo */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: var(--dark-text);
+      line-height: 1.6;
+      min-height: 100vh;
       margin: 0;
       padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      color: #1e293b;
+      justify-content: center; /* Centrar verticalmente */
     }
 
     /* Botón regresar */
@@ -35,6 +42,7 @@
 
     h1 {
       margin-bottom: 15px;
+      text-align: center; /* Centrar texto */
     }
 
     .panel {
@@ -45,6 +53,7 @@
       width: 100%;
       padding: 25px 30px;
       margin-bottom: 25px;
+      text-align: center; /* Centrar texto */
     }
 
     .description {
@@ -54,11 +63,26 @@
       margin-bottom: 20px;
     }
 
+    .simulator {
+      background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+      border-radius: 15px;
+      padding: 20px;
+      margin: 30px 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 850px; /* Ancho máximo del simulador */
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centrar contenido horizontalmente */
+    }
+
     .controls {
       display: flex;
       flex-direction: column;
       gap: 15px;
       margin-bottom: 20px;
+      width: 100%;
+      max-width: 500px;
     }
 
     label {
@@ -90,6 +114,7 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
       width: 100%;
+      max-width: 300px; /* Ancho máximo de los botones */
     }
 
     button:hover:not(:disabled) {
@@ -104,18 +129,18 @@
     .simulator-track {
       position: relative;
       width: 100%;
-      max-width: 850px;
       height: 80px;
       background: #e5e7eb;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid #cbd5e1;
+      margin-top: 10px;
     }
 
     .block {
       position: absolute;
       top: 50%;
-      left: 50px;
+      left: 0;
       transform: translateY(-50%);
       width: 48px;
       height: 48px;
@@ -136,6 +161,8 @@
       text-align: center;
       color: #334155;
       min-height: 24px;
+      width: 100%;
+      max-width: 850px;
     }
   </style>
 </head>
@@ -167,7 +194,7 @@
     </div>
 
     <button id="startBtn">Iniciar Simulación</button>
-    <button id="resetBtn">Reiniciar</button>
+    <button id="resetBtn" disabled>Reiniciar</button>
 
     <div class="info-box">
       <div class="info">
@@ -178,7 +205,7 @@
       </div>
     </div>
 
-    <div class="simulator-track">
+    <div class="simulator-track" id="simulatorTrack">
       <div class="block" id="block">📦</div>
     </div>
   </div>
@@ -193,12 +220,23 @@
     const forceDisplay = document.getElementById('forceDisplay');
     const startBtn = document.getElementById('startBtn');
     const resetBtn = document.getElementById('resetBtn');
+    const simulatorTrack = document.getElementById('simulatorTrack');
 
     let animationId = null;
     let velocity = 0;
     let distance = 0;
     let acceleration = 0;
-    const delta = 0.1;
+    const delta = 0.1; // tiempo entre frames
+
+    // Obtener dimensiones y establecer límites
+    function getLimits() {
+      const trackRect = simulatorTrack.getBoundingClientRect();
+      const blockRect = block.getBoundingClientRect();
+      // left position mínimo y máximo dentro del contenedor
+      const minPos = 0;
+      const maxPos = trackRect.width - blockRect.width;
+      return { minPos, maxPos };
+    }
 
     massSlider.addEventListener('input', () => {
       massDisplay.textContent = massSlider.value;
@@ -224,37 +262,47 @@
       velocity = 0;
       distance = 0;
 
-      block.style.left = '50px';
+      // Poner el bloque al límite izquierdo, en left=0
+      block.style.left = '0px';
+
       distanceDisplay.textContent = '0.00';
       accelDisplay.textContent = acceleration.toFixed(2);
       startBtn.disabled = true;
+      resetBtn.disabled = false;
       animate();
     });
 
     resetBtn.addEventListener('click', () => {
       cancelAnimationFrame(animationId);
-      block.style.left = '50px';
+      block.style.left = '0px';
       velocity = 0;
       distance = 0;
       distanceDisplay.textContent = '0.00';
       updateAccelerationDisplay();
       startBtn.disabled = false;
+      resetBtn.disabled = true;
     });
 
     function animate() {
       velocity += acceleration * delta;
       distance += velocity * delta;
 
-      const pos = 50 + distance * 15; // Escala de movimiento
-      if (pos < 50) {
-        block.style.left = '50px'; // Limite izquierdo
-        velocity = -velocity; // Invertir dirección
-      } else if (pos > 800) {
-        block.style.left = '800px'; // Limite derecho
-        velocity = -velocity; // Invertir dirección
-      } else {
-        block.style.left = pos + 'px';
+      const { minPos, maxPos } = getLimits();
+
+      // Calcular posición tentativa
+      // Para escalar la distancia al pixel moveré factor 20 para que se vea movimiento visible
+      let pos = distance * 20;
+
+      // Limitar pos para que esté dentro [minPos, maxPos]
+      if (pos < minPos) {
+        pos = minPos;
+        velocity = -velocity; // rebote invierte velocidad
+      } else if (pos > maxPos) {
+        pos = maxPos;
+        velocity = -velocity;
       }
+
+      block.style.left = pos + 'px';
 
       distanceDisplay.textContent = distance.toFixed(2);
 
@@ -262,10 +310,11 @@
     }
 
     // Calcular aceleración inicial al cargar
-    window.addEventListener('DOMContentLoaded', updateAccelerationDisplay);
+    window.addEventListener('DOMContentLoaded', () => {
+      updateAccelerationDisplay();
+      resetBtn.disabled = true;
+    });
   </script>
 
 </body>
 </html>
-
-

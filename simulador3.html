@@ -2,253 +2,356 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Simulador - Tercera Ley de Newton</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulador - Tercera Ley de Newton con Figuras de Personas</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
+      background: var(--gradient-bg);
+      background-image: url('img-2.jpg'); /* Imagen de fondo */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: var(--dark-text, #222);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
     }
 
     header {
-      background-color: #2563eb;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
       color: white;
-      padding: 20px;
+      padding: 25px 15px;
+      width: 100%;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
       text-align: center;
     }
 
     main {
-      padding: 20px;
       max-width: 800px;
-      margin: auto;
+      width: 100%;
+      padding: 0 15px 40px;
+      margin: 30px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    h2 {
-      color: #2563eb;
+    h1, h2 {
+      margin: 0 0 15px;
+      text-align: center;
     }
 
     p.info {
-      background-color: #e0edff;
-      border-left: 5px solid #2563eb;
-      padding: 10px 15px;
-      border-radius: 5px;
+      background-color: rgba(219, 234, 254, 0.9);
+      border-left: 6px solid #2563eb;
+      padding: 15px 20px;
+      font-size: 1.1rem;
+      line-height: 1.5;
+      border-radius: 6px;
+      margin-bottom: 25px;
+      max-width: 700px;
+      text-align: center;
     }
 
     .controls {
-      margin-top: 20px;
-      background: white;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     label {
-      font-weight: bold;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+      color: #2563eb;
+      width: 100%;
+      text-align: left;
     }
 
     .slider {
       width: 100%;
-    }
-
-    .button {
-      margin: 10px 5px 0 0;
-      padding: 10px 15px;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 5px;
+      margin-bottom: 20px;
       cursor: pointer;
     }
 
+    .slider + span {
+      font-weight: 600;
+      color: #1e40af;
+      display: block;
+      text-align: center;
+      margin-top: -15px;
+      margin-bottom: 10px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .button {
+      background-color: #2563eb;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 700;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      user-select: none;
+      text-decoration: none;
+      text-align: center;
+      flex: 1;
+      max-width: 150px;
+    }
+
+    .button:hover:not(:disabled) {
+      background-color: #1e40af;
+    }
+
     .button:disabled {
-      background-color: #aaa;
+      background-color: #94a3b8;
       cursor: not-allowed;
     }
 
     .arena {
       position: relative;
+      margin: 0 auto;
       width: 100%;
       max-width: 600px;
-      height: 150px;
-      margin: 30px auto;
-      background-color: #e2e8f0;
-      border: 2px dashed #94a3b8;
-      border-radius: 10px;
+      height: 180px;
+      background-color: rgba(224, 231, 255, 0.9);
+      border: 3px dashed #93c5fd;
+      border-radius: 15px;
       overflow: hidden;
-    }
-
-    .ball {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      top: 50%;
-      transform: translateY(-50%);
+      box-shadow: inset 0 0 15px rgba(147, 197, 253, 0.7);
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 20px;
+      padding: 0 15px;
     }
 
-    .ball1 {
-      background-color: #3b82f6;
+    /* Persona SVG estilo */
+    .person {
+      width: 60px;
+      height: 100px;
+      cursor: pointer;
+      filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.15));
+      user-select: none;
+      flex-shrink: 0;
+      position: absolute; /* Cambiado a posición absoluta para el movimiento */
     }
 
-    .ball2 {
-      background-color: #ef4444;
+    #person1 svg {
+      fill: #2563eb;
     }
 
-    @media (max-width: 600px) {
+    #person2 svg {
+      fill: #ef4444;
+    }
+
+    .result {
+      margin-top: 25px;
+      font-weight: 700;
+      color: #e60f0f;
+      font-size: 1.2rem;
+      min-height: 2em;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    @media (max-width: 620px) {
       .arena {
-        width: 100%;
+        max-width: 100%;
+        height: 140px;
+      }
+      .person {
+        width: 45px;
+        height: 75px;
       }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Simulador Interactivo</h1>
-    <h2>Tercera Ley de Newton</h2>
-  </header>
+<header>
+  <h1>Simulador Interactivo</h1>
+  <h2>Tercera Ley de Newton con Figuras de Personas</h2>
+</header>
 
-  <main>
-    <p class="info">
-      <strong>¿Qué dice la Tercera Ley de Newton?</strong><br />
-      “A toda acción siempre hay una reacción igual y contraria.” Esto significa que si un objeto A ejerce una fuerza sobre un objeto B, el objeto B ejercerá una fuerza de igual magnitud pero en sentido opuesto sobre el objeto A.
-    </p>
+<main>
+  <p class="info">
+    <strong>¿Qué dice la Tercera Ley de Newton?</strong><br />
+    “A toda acción siempre hay una reacción igual y contraria.” Esto significa que si un objeto A ejerce una fuerza sobre un objeto B, el objeto B ejercerá una fuerza de igual magnitud pero en sentido opuesto sobre el objeto A.
+  </p>
 
-    <style>
-  /* Estilo unificado para todos los botones y enlaces con clase .button */
-  .button {
-    margin: 10px 5px 0 0;
-    padding: 10px 15px;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    transition: background-color 0.3s ease;
-  }
+  <section class="controls">
+    <label for="force1">Fuerza Objeto 1 (N):</label>
+    <input type="range" id="force1" min="5" max="30" value="10" class="slider" />
+    <span id="force1Val">10</span>
 
-  .button:hover {
-    background-color: #1e40af;
-  }
+    <label for="force2">Fuerza Objeto 2 (N):</label>
+    <input type="range" id="force2" min="5" max="30" value="10" class="slider" />
+    <span id="force2Val">10</span>
 
-  .button:disabled {
-    background-color: #aaa;
-    cursor: not-allowed;
-  }
-</style>
-
-<div class="controls">
-  <label>Fuerza Objeto 1 (N): <span id="force1Val">10</span></label>
-  <input type="range" id="force1" min="5" max="30" value="10" class="slider">
-
-  <label>Fuerza Objeto 2 (N): <span id="force2Val">10</span></label>
-  <input type="range" id="force2" min="5" max="30" value="10" class="slider">
-
-  <div>
-    <button class="button" onclick="window.history.back()">← Regresar</button>
-    <button id="startBtn" class="button">Iniciar Simulación</button>
-    <button id="resetBtn" class="button">Reiniciar</button>
-    <a href="calculadora-3.html" class="button">Calculadora</a>
-  </div>
-</div>
-
-
-    <div class="arena">
-      <div id="ball1" class="ball ball1" style="left: 100px;">1</div>
-      <div id="ball2" class="ball ball2" style="left: 450px;">2</div>
+    <div class="button-group">
+      <button id="backBtn" class="button" title="Regresar">← Regresar</button>
+      <button id="startBtn" class="button">Iniciar Simulación</button>
+      <button id="resetBtn" class="button" disabled>Reiniciar</button>
+      <a href="calculadora-3.html" id="calculatorBtn" class="button" title="Calculadora">Calculadora</a>
     </div>
-  </main>
+  </section>
 
-  <script>
-    const ball1 = document.getElementById('ball1');
-    const ball2 = document.getElementById('ball2');
-    const force1Slider = document.getElementById('force1');
-    const force2Slider = document.getElementById('force2');
-    const force1Val = document.getElementById('force1Val');
-    const force2Val = document.getElementById('force2Val');
-    const startBtn = document.getElementById('startBtn');
-    const resetBtn = document.getElementById('resetBtn');
+  <section class="arena" aria-label="Zona de simulación">
+    <div id="person1" class="person" style="left: 80px;" aria-label="Persona 1" tabindex="0" title="Persona 1">
+      <svg width="60" height="100" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <circle cx="32" cy="12" r="10"></circle>
+        <rect x="22" y="22" width="20" height="30" rx="8" ry="8"></rect>
+        <rect x="8" y="30" width="12" height="10" rx="6" ry="6"></rect>
+        <rect x="44" y="30" width="12" height="10" rx="6" ry="6"></rect>
+      </svg>
+    </div>
 
-    let pos1 = 100;
-    let pos2 = 450;
-    let vel1 = 0;
-    let vel2 = 0;
-    let anim;
+    <div id="person2" class="person" style="left: 450px;" aria-label="Persona 2" tabindex="0" title="Persona 2">
+      <svg width="60" height="100" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <circle cx="32" cy="12" r="10"></circle>
+        <rect x="22" y="22" width="20" height="30" rx="8" ry="8"></rect>
+        <rect x="8" y="30" width="12" height="10" rx="6" ry="6"></rect>
+        <rect x="44" y="30" width="12" height="10" rx="6" ry="6"></rect>
+      </svg>
+    </div>
+  </section>
 
-    function updateForceLabels() {
-      force1Val.textContent = force1Slider.value;
-      force2Val.textContent = force2Slider.value;
+  <div id="resultText" class="result" aria-live="polite"></div>
+</main>
+
+<script>
+  const person1 = document.getElementById('person1');
+  const person2 = document.getElementById('person2');
+
+  const force1Slider = document.getElementById('force1');
+  const force2Slider = document.getElementById('force2');
+  const force1Val = document.getElementById('force1Val');
+  const force2Val = document.getElementById('force2Val');
+
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const backBtn = document.getElementById('backBtn');
+  const calculatorBtn = document.getElementById('calculatorBtn');
+  const resultText = document.getElementById('resultText');
+
+  let pos1 = 80;
+  let pos2 = 450;
+  let vel1 = 0;
+  let vel2 = 0;
+  let animationFrameId = null;
+
+  function updateForceLabels() {
+    force1Val.textContent = force1Slider.value;
+    force2Val.textContent = force2Slider.value;
+  }
+
+  function startSimulation() {
+    cancelAnimationFrame(animationFrameId);
+
+    pos1 = 80;
+    pos2 = 450;
+
+    const f1 = parseInt(force1Slider.value);
+    const f2 = parseInt(force2Slider.value);
+
+    vel1 = f1 / 5;
+    vel2 = -f2 / 5;
+
+    startBtn.disabled = true;
+    resetBtn.disabled = false;
+
+    if (f1 === f2) {
+      resultText.textContent = `Fuerza aplicada igual y opuesta: ${f1} N en ambas personas.`;
+    } else {
+      resultText.textContent = `Persona 1 aplica ${f1} N, Persona 2 aplica ${f2} N (igual y opuesta).`;
     }
 
-    function startSimulation() {
-      cancelAnimationFrame(anim);
+    animate();
+  }
 
-      pos1 = 100;
-      pos2 = 450;
+  function animate() {
+    pos1 += vel1;
+    pos2 += vel2;
 
-      const f1 = parseInt(force1Slider.value);
-      const f2 = parseInt(force2Slider.value);
-
-      vel1 = f1 / 5;
-      vel2 = -f2 / 5;
-
-      startBtn.disabled = true;
-
-      animate();
+    // Verificar colisión y cambiar dirección
+    if (pos1 + 60 >= pos2) {
+      const temp = vel1;
+      vel1 = vel2;
+      vel2 = temp;
     }
 
-    function animate() {
-      pos1 += vel1;
-      pos2 += vel2;
+    // Limitar posiciones
+    if (pos1 <= 0) pos1 = 0;
+    if (pos2 + 60 >= 600) pos2 = 600 - 60;
 
-      if (pos1 + 50 >= pos2) {
-        const temp = vel1;
-        vel1 = vel2;
-        vel2 = temp;
-      }
+    // Actualizar posiciones de las figuras
+    person1.style.left = `${pos1}px`;
+    person2.style.left = `${pos2}px`;
 
-      if (pos1 <= 0 || pos2 + 50 >= 600) {
-        cancelAnimationFrame(anim);
-        startBtn.disabled = false;
-        return;
-      }
+    // Continuar animación
+    animationFrameId = requestAnimationFrame(animate);
+  }
 
-      ball1.style.left = `${pos1}px`;
-      ball2.style.left = `${pos2}px`;
+  function resetSimulation() {
+    cancelAnimationFrame(animationFrameId);
+    pos1 = 80;
+    pos2 = 450;
+    vel1 = 0;
+    vel2 = 0;
 
-      anim = requestAnimationFrame(animate);
-    }
+    person1.style.left = `${pos1}px`;
+    person2.style.left = `${pos2}px`;
 
-    function resetSimulation() {
-      cancelAnimationFrame(anim);
-      pos1 = 100;
-      pos2 = 450;
-      vel1 = 0;
-      vel2 = 0;
-      ball1.style.left = `${pos1}px`;
-      ball2.style.left = `${pos2}px`;
-      startBtn.disabled = false;
-    }
+    resultText.textContent = '';
+    startBtn.disabled = false;
+    resetBtn.disabled = true;
+  }
 
-    force1Slider.addEventListener('input', updateForceLabels);
-    force2Slider.addEventListener('input', updateForceLabels);
-    startBtn.addEventListener('click', startSimulation);
-    resetBtn.addEventListener('click', resetSimulation);
-
+  force1Slider.addEventListener('input', () => {
     updateForceLabels();
-  </script>
+    if (!startBtn.disabled) resultText.textContent = '';
+  });
+  force2Slider.addEventListener('input', () => {
+    updateForceLabels();
+    if (!startBtn.disabled) resultText.textContent = '';
+  });
+
+  startBtn.addEventListener('click', startSimulation);
+  resetBtn.addEventListener('click', resetSimulation);
+
+  backBtn.addEventListener('click', () => {
+    window.history.back();
+  });
+
+  calculatorBtn.addEventListener('click', (e) => {
+    // Comportamiento predeterminado de enlace
+  });
+
+  updateForceLabels();
+</script>
 
 </body>
 </html>
+

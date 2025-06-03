@@ -1,6 +1,6 @@
 :root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
+    --primary-color: #52a5db;
+    --secondary-color: #54789c;
     --accent-color: #e74c3c;
     --light-color: #ecf0f1;
     --dark-color: #34495e;
@@ -85,7 +85,7 @@ canvas {
 
 /* Botón */
 .boton-redireccion {
-    background-color: #416c88;
+    background-color: #91c0e4;
     color: white;
     padding: 10px 20px;
     display: inline-block;
@@ -95,7 +95,7 @@ canvas {
 }
 
 .boton-redireccion:hover {
-    background-color: #5181a3;
+    background-color: #0d7ece;
 }
 
 /* Header */
